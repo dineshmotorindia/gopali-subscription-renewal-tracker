@@ -23,6 +23,38 @@
     padding: 28px 16px;
   }
   #root { min-height: calc(100vh - 56px); }
+
+  /* ---------- interactive states ---------- */
+  .gp-btn { transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease; }
+  .gp-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(28,43,57,0.18); }
+  .gp-btn:active { transform: translateY(0); box-shadow: none; }
+
+  .gp-icon-btn { transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease; }
+  .gp-icon-btn:hover { border-color: #A8792F !important; color: #A8792F !important; box-shadow: 0 4px 10px rgba(28,43,57,0.12); }
+
+  .gp-stat { transition: transform 0.18s ease, box-shadow 0.18s ease; cursor: default; }
+  .gp-stat:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(28,43,57,0.14); z-index: 1; position: relative; }
+
+  .gp-row { transition: background-color 0.15s ease; }
+  .gp-row:hover { background-color: #FBF7EE; }
+
+  .gp-input, .gp-select { transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+  .gp-input:focus, .gp-select:focus { outline: none; border-color: #A8792F !important; box-shadow: 0 0 0 3px rgba(168,121,47,0.18); }
+
+  .gp-badge-urgent { animation: gp-pulse 2s ease-in-out infinite; }
+  @keyframes gp-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(168,67,43,0.35); }
+    50% { box-shadow: 0 0 0 5px rgba(168,67,43,0); }
+  }
+
+  .gp-link-btn { transition: color 0.15s ease; }
+  .gp-link-btn:hover { color: #A8432B !important; }
+
+  .gp-title-icon { animation: gp-spin-in 0.6s ease; }
+  @keyframes gp-spin-in {
+    from { transform: rotate(-90deg) scale(0.6); opacity: 0; }
+    to { transform: rotate(0deg) scale(1); opacity: 1; }
+  }
 </style>
 </head>
 <body>
@@ -46,6 +78,10 @@ const FileDown = (p) => <Icon {...p}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0
 const AlertTriangle = (p) => <Icon {...p}><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></Icon>;
 const Eye = (p) => <Icon {...p}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z" /><circle cx="12" cy="12" r="3" /></Icon>;
 const EyeOff = (p) => <Icon {...p}><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a13.16 13.16 0 0 1-1.67 2.68" /><path d="M6.61 6.61A13.526 13.526 0 0 0 1 12s4 8 11 8a9.26 9.26 0 0 0 5.39-1.61" /><line x1="2" y1="2" x2="22" y2="22" /></Icon>;
+const RefreshCw = (p) => <Icon {...p}><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" /><path d="M16 16h5v5" /></Icon>;
+const Phone = (p) => <Icon {...p}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z" /></Icon>;
+const MapPin = (p) => <Icon {...p}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></Icon>;
+const Mail = (p) => <Icon {...p}><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></Icon>;
 
 /* ---------- design tokens ---------- */
 const INK = "#1C2B39", PAPER = "#FAF6EF", BRASS = "#A8792F", RUST = "#A8432B",
@@ -252,7 +288,10 @@ Subscriptions Desk`;
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
           <div>
             <div style={{ fontSize: "12px", letterSpacing: "0.12em", color: BRASS, fontWeight: 600 }}>GOPALI &amp; CO &nbsp;·&nbsp; SUBSCRIPTIONS DESK</div>
-            <h1 style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 700, fontSize: "34px", margin: "4px 0 0", color: INK }}>Renewal Tracker</h1>
+            <h1 style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 700, fontSize: "34px", margin: "4px 0 0", color: INK, display: "flex", alignItems: "center", gap: "10px" }}>
+              <span className="gp-title-icon" style={{ display: "inline-flex", color: BRASS }}><RefreshCw size={26} /></span>
+              Renewal Tracker
+            </h1>
           </div>
           <div style={{ fontSize: "13px", color: "#6B6252", fontFamily: "'Source Serif 4', serif", fontStyle: "italic" }}>
             {today.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
@@ -268,11 +307,11 @@ Subscriptions Desk`;
               Works with a simple name/expiry CSV, or a direct export from the Access database (sub_cname, SUB_ENMON, MAGCODE, etc.)
             </p>
             <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
-              <label style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: INK, color: PAPER, padding: "10px 18px", borderRadius: "3px", fontSize: "13px", fontWeight: 600, cursor: "pointer" }}>
+              <label className="gp-btn" style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: INK, color: PAPER, padding: "10px 18px", borderRadius: "3px", fontSize: "13px", fontWeight: 600, cursor: "pointer" }}>
                 <Upload size={15} /> Upload CSV / TXT
                 <input type="file" accept=".csv,.txt" onChange={handleFile} style={{ display: "none" }} />
               </label>
-              <button onClick={loadSample} style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "transparent", color: INK, border: `1px solid ${INK}`, padding: "10px 18px", borderRadius: "3px", fontSize: "13px", fontWeight: 600, cursor: "pointer" }}>
+              <button onClick={loadSample} className="gp-btn" style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "transparent", color: INK, border: `1px solid ${INK}`, padding: "10px 18px", borderRadius: "3px", fontSize: "13px", fontWeight: 600, cursor: "pointer" }}>
                 <FileDown size={15} /> Try sample data
               </button>
             </div>
@@ -300,7 +339,7 @@ Subscriptions Desk`;
                 { label: "Due in 31–60 days", value: stats.d60, color: "#7A6A2E" },
                 { label: "Healthy (60+ days)", value: stats.healthy, color: SAGE },
               ].map((s) => (
-                <div key={s.label} style={{ background: "#fff", padding: "16px 14px" }}>
+                <div key={s.label} className="gp-stat" style={{ background: "#fff", padding: "16px 14px" }}>
                   <div style={{ fontFamily: "'Source Serif 4', serif", fontSize: "26px", fontWeight: 700, color: s.color }}>{s.value.toLocaleString("en-IN")}</div>
                   <div style={{ fontSize: "11.5px", color: "#6B6252", marginTop: "2px" }}>{s.label}</div>
                 </div>
@@ -308,7 +347,7 @@ Subscriptions Desk`;
             </div>
 
             {stats.recentOverdue > 0 && statusFilter !== "Recently overdue" && (
-              <button onClick={() => setStatusFilter("Recently overdue")} style={{ fontSize: "12px", color: RUST, background: "#F3E2DC", border: "none", borderRadius: "3px", padding: "7px 12px", cursor: "pointer", fontWeight: 600, marginBottom: "16px" }}>
+              <button onClick={() => setStatusFilter("Recently overdue")} className="gp-btn" style={{ fontSize: "12px", color: RUST, background: "#F3E2DC", border: "none", borderRadius: "3px", padding: "7px 12px", cursor: "pointer", fontWeight: 600, marginBottom: "16px" }}>
                 Jump to the {stats.recentOverdue.toLocaleString("en-IN")} subscribers overdue in the last 30 days →
               </button>
             )}
@@ -316,23 +355,23 @@ Subscriptions Desk`;
             <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "10px", alignItems: "center" }}>
               <div style={{ position: "relative", flex: "1 1 220px" }}>
                 <span style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", color: "#9A9280" }}><Search size={14} /></span>
-                <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search name, company or subscriber code"
+                <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search name, company or subscriber code" className="gp-input"
                   style={{ width: "100%", padding: "9px 10px 9px 32px", border: `1px solid ${HAIRLINE}`, borderRadius: "3px", fontSize: "13px", background: "#fff", outline: "none" }} />
               </div>
-              <select value={pubFilter} onChange={(e) => setPubFilter(e.target.value)} style={{ padding: "9px 10px", border: `1px solid ${HAIRLINE}`, borderRadius: "3px", fontSize: "13px", background: "#fff" }}>
+              <select value={pubFilter} onChange={(e) => setPubFilter(e.target.value)} className="gp-select" style={{ padding: "9px 10px", border: `1px solid ${HAIRLINE}`, borderRadius: "3px", fontSize: "13px", background: "#fff" }}>
                 {publications.map((p) => <option key={p} value={p}>{p === "All" ? "All publications" : p}</option>)}
               </select>
-              <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} style={{ padding: "9px 10px", border: `1px solid ${HAIRLINE}`, borderRadius: "3px", fontSize: "13px", background: "#fff" }}>
+              <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="gp-select" style={{ padding: "9px 10px", border: `1px solid ${HAIRLINE}`, borderRadius: "3px", fontSize: "13px", background: "#fff" }}>
                 {statusOptions.map((s) => <option key={s} value={s}>{s === "All" ? "All statuses" : s}</option>)}
               </select>
-              <button onClick={() => { setRows([]); setLoaded(false); setQuery(""); setPubFilter("All"); setStatusFilter("All"); }}
+              <button onClick={() => { setRows([]); setLoaded(false); setQuery(""); setPubFilter("All"); setStatusFilter("All"); }} className="gp-link-btn"
                 style={{ fontSize: "12px", color: "#6B6252", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}>
                 Load a different file
               </button>
             </div>
 
             {deletedCount > 0 && (
-              <button onClick={() => setShowDeleted((v) => !v)} style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "#6B6252", background: "none", border: "none", cursor: "pointer", marginBottom: "14px", padding: 0 }}>
+              <button onClick={() => setShowDeleted((v) => !v)} className="gp-link-btn" style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "#6B6252", background: "none", border: "none", cursor: "pointer", marginBottom: "14px", padding: 0 }}>
                 {showDeleted ? <EyeOff size={13} /> : <Eye size={13} />}
                 {showDeleted ? `Hide ${deletedCount.toLocaleString("en-IN")} cancelled records` : `Show ${deletedCount.toLocaleString("en-IN")} cancelled records too`}
               </button>
@@ -346,25 +385,36 @@ Subscriptions Desk`;
                 <div style={{ padding: "32px", textAlign: "center", color: "#9A9280", fontSize: "13px" }}>No subscribers match this filter.</div>
               ) : (
                 displayRows.map((r, idx) => (
-                  <div key={idx} style={{ display: "grid", gridTemplateColumns: "1.8fr 1fr 1fr 0.9fr 1.2fr", padding: "14px 16px", borderTop: `1px solid ${HAIRLINE}`, alignItems: "center", fontSize: "13px" }}>
+                  <div key={idx} className="gp-row" style={{ display: "grid", gridTemplateColumns: "1.8fr 1fr 1fr 0.9fr 1.2fr", padding: "14px 16px", borderTop: `1px solid ${HAIRLINE}`, alignItems: "center", fontSize: "13px" }}>
                     <div>
                       <div style={{ fontWeight: 600 }}>{r.company || r.name}</div>
                       {r.company && <div style={{ fontSize: "11.5px", color: "#9A9280" }}>{r.name}</div>}
-                      <div style={{ fontSize: "11.5px", color: "#9A9280", marginTop: "2px" }}>{[r.location, r.phone].filter(Boolean).join(" · ") || "no location/phone on file"}</div>
-                      <div style={{ fontSize: "11.5px", color: r.email ? "#3A5A7A" : "#C4BCA6", marginTop: "2px", wordBreak: "break-all" }}>{r.email || "no email on file"}</div>
+                      <div style={{ fontSize: "11.5px", color: "#9A9280", marginTop: "2px", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+                        {r.location && <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}><MapPin size={11} />{r.location}</span>}
+                        {r.phone && <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}><Phone size={11} />{r.phone}</span>}
+                        {!r.location && !r.phone && "no location/phone on file"}
+                      </div>
+                      <div style={{ fontSize: "11.5px", color: r.email ? "#3A5A7A" : "#C4BCA6", marginTop: "2px", wordBreak: "break-all", display: "flex", alignItems: "center", gap: "4px" }}>
+                        {r.email && <Mail size={11} />} {r.email || "no email on file"}
+                      </div>
                     </div>
                     <div>{r.publication}</div>
                     <div>{fmtDate(r.expiry)}</div>
-                    <div><span style={{ fontSize: "11px", fontWeight: 600, padding: "3px 9px", borderRadius: "12px", background: r.status.bg, color: r.status.color }}>{r.status.label}</span></div>
+                    <div>
+                      <span className={r.status.label === "Urgent" || r.status.label === "Recently overdue" || r.status.label === "Long overdue" ? "gp-badge-urgent" : ""}
+                        style={{ fontSize: "11px", fontWeight: 600, padding: "3px 9px", borderRadius: "12px", background: r.status.bg, color: r.status.color, display: "inline-block" }}>
+                        {r.status.label}
+                      </span>
+                    </div>
                     <div style={{ textAlign: "right", display: "flex", gap: "6px", justifyContent: "flex-end", flexWrap: "wrap" }}>
-                      <button onClick={() => copyReminder(r, idx)} title="Copy reminder message"
+                      <button onClick={() => copyReminder(r, idx)} title="Copy reminder message" className="gp-icon-btn"
                         style={{ display: "inline-flex", alignItems: "center", gap: "5px", fontSize: "12px", padding: "6px 8px", borderRadius: "3px", border: `1px solid ${HAIRLINE}`, background: copiedIdx === idx ? "#E7EEE7" : "#fff", color: copiedIdx === idx ? SAGE : INK, cursor: "pointer" }}>
                         {copiedIdx === idx ? <Check size={13} /> : <Copy size={13} />}
                       </button>
                       {r.email && (
-                        <a href={mailtoLink(r)} title="Open a pre-filled reminder email"
+                        <a href={mailtoLink(r)} title="Open a pre-filled reminder email" className="gp-icon-btn"
                           style={{ display: "inline-flex", alignItems: "center", gap: "5px", fontSize: "12px", padding: "6px 8px", borderRadius: "3px", border: `1px solid ${HAIRLINE}`, background: "#fff", color: INK, textDecoration: "none" }}>
-                          Email
+                          <Mail size={12} /> Email
                         </a>
                       )}
                     </div>
