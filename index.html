@@ -387,9 +387,9 @@ Subscriptions Desk`;
                 displayRows.map((r, idx) => (
                   <div key={idx} className="gp-row" style={{ display: "grid", gridTemplateColumns: "1.8fr 1fr 1fr 0.9fr 1.2fr", padding: "14px 16px", borderTop: `1px solid ${HAIRLINE}`, alignItems: "center", fontSize: "13px" }}>
                     <div>
-                      <div style={{ fontWeight: 600 }}>{r.company || r.name}</div>
+                      {r.code && <div style={{ fontWeight: 700, fontSize: "13.5px", color: INK }}>{r.code}</div>}
+                      <div style={{ fontWeight: r.code ? 500 : 600, fontSize: r.code ? "12.5px" : "13px", color: r.code ? "#6B6252" : INK, marginTop: r.code ? "2px" : 0 }}>{r.company || r.name}</div>
                       {r.company && <div style={{ fontSize: "11.5px", color: "#9A9280" }}>{r.name}</div>}
-                      {r.code && <div style={{ fontSize: "11.5px", color: "#9A9280", marginTop: "2px" }}>Sub code: {r.code}</div>}
                       <div style={{ fontSize: "11.5px", color: "#9A9280", marginTop: "2px", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
                         {r.location && <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}><MapPin size={11} />{r.location}</span>}
                         {r.phone && <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}><Phone size={11} />{r.phone}</span>}
