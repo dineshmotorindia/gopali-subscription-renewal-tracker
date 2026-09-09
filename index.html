@@ -150,39 +150,52 @@ function fmtDate(dateStr) {
 }
 
 function normalizeRow(r) {
-  const isLegacy = "SUB_ENMON" in r || "sub_cname" in r || "MAGCODE" in r;
+  // Build a lowercase-keyed lookup so column headers match regardless of case
+  // (fixes: exported "Name"/"Expiry" headers vs. imported lowercase "name"/"expiry").
+  const lower = {};
+  Object.keys(r).forEach((k) => { lower[k.trim().toLowerCase()] = r[k]; });
+  const get = (...keys) => {
+    for (const k of keys) {
+      const v = lower[k.toLowerCase()];
+      if (v !== undefined && v !== null) return String(v);
+    }
+    return "";
+  };
+
+  const isLegacy = "sub_enmon" in lower || "sub_cname" in lower || "magcode" in lower;
+
   if (isLegacy) {
-    const contact = (r.sub_sname || "").trim();
-    const company = (r.sub_cname || "").trim();
-    const magcode = (r.MAGCODE || "").trim().toUpperCase();
-    const city = (r.sub_add4 || "").trim();
-    const state = (r.SUB_STATE || "").trim().replace(/^\(|\)$/g, "");
+    const contact = get("sub_sname").trim();
+    const company = get("sub_cname").trim();
+    const magcode = get("magcode").trim().toUpperCase();
+    const city = get("sub_add4").trim();
+    const state = get("sub_state").trim().replace(/^\(|\)$/g, "");
     return {
       name: contact || company || "(no name on file)",
       company,
-      phone: (r.sub_telno || "").trim(),
-      email: (r.sub_email || "").trim(),
+      phone: get("sub_telno").trim(),
+      email: get("sub_email").trim(),
       location: [city, state].filter(Boolean).join(", "),
       publication: MAG_MAP[magcode] || magcode || "Unknown",
-      type: [r.SUB_TYPE, r.sub_period ? `${r.sub_period} yr` : ""].filter(Boolean).join(" · ") || "—",
-      expiry: yyyymmToDate(r.SUB_ENMON),
-      start: yyyymmToDate(r.SUB_STMON || r.sub_stmon),
-      deleted: (r.sub_deleted || "").trim().toUpperCase() === "Y",
-      code: (r.sub_code || "").trim(),
+      type: [get("sub_type"), get("sub_period") ? `${get("sub_period")} yr` : ""].filter(Boolean).join(" · ") || "—",
+      expiry: yyyymmToDate(get("sub_enmon")),
+      start: yyyymmToDate(get("sub_stmon")),
+      deleted: get("sub_deleted").trim().toUpperCase() === "Y",
+      code: get("sub_code", "subscriber code").trim(),
     };
   }
   return {
-    name: (r.name || "").trim(),
-    company: (r.company || "").trim(),
-    phone: (r.phone || "").trim(),
-    email: (r.email || "").trim(),
-    location: (r.location || "").trim(),
-    publication: (r.publication || "Other").trim(),
-    type: (r.type || "—").trim(),
-    start: (r.start || "").trim(),
-    expiry: (r.expiry || "").trim(),
-    deleted: false,
-    code: (r.code || r.subcode || r.sub_code || "").trim(),
+    name: get("name").trim(),
+    company: get("company").trim(),
+    phone: get("phone").trim(),
+    email: get("email").trim(),
+    location: get("location").trim(),
+    publication: get("publication").trim() || "Other",
+    type: get("type").trim() || "—",
+    start: get("start", "subscription start date").trim(),
+    expiry: get("expiry").trim(),
+    deleted: get("deleted", "cancelled").trim().toUpperCase() === "Y" || get("deleted", "cancelled").trim().toUpperCase() === "TRUE",
+    code: get("code", "subcode", "sub_code", "subscriber code").trim(),
   };
 }
 
@@ -335,7 +348,9 @@ function RenewalTracker() {
     "Location": r.location || "",
     "Publication": r.publication || "",
     "Type": r.type || "",
+    "Start": r.start || "",
     "Expiry": r.expiry || "",
+    "Cancelled": r.deleted ? "Y" : "N",
     "Status": r.status.label,
     "Days Remaining": r.days === null ? "" : r.days,
   }));
